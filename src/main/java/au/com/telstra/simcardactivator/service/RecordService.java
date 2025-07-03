@@ -15,8 +15,8 @@ public class RecordService {
         this.recordRepository = recordRepository;
     }
     
-    public Record save(Record record) {
-        return recordRepository.save(record);
+    public Record save(Record newRecord) {
+        return recordRepository.save(newRecord);
     }
 
     public Record findById(Long id) {

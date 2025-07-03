@@ -26,16 +26,16 @@ public class SimActivationController {
 
     @GetMapping("/query")
     public ResponseEntity<SimCardResponse> getSimCard(@RequestParam Long simCardId) {
-        Record record = recordService.findById(simCardId);
+        Record simCardRecord = recordService.findById(simCardId);
 
-        if (record == null) {
+        if (simCardRecord == null) {
             return ResponseEntity.notFound().build();
         }
 
         SimCardResponse response = new SimCardResponse(
-                record.getIccid(),
-                record.getCustomerEmail(),
-                record.isActive());
+            simCardRecord.getIccid(),
+            simCardRecord.getCustomerEmail(),
+            simCardRecord.isActive());
 
         return ResponseEntity.ok(response);
     }
@@ -44,11 +44,11 @@ public class SimActivationController {
     public ResponseEntity<String> createSimCard(@Valid @RequestBody SimActivationRequest request) {
         boolean isSuccess = actuatorService.activateSimCard(request.getIccid());
 
-        Record record = new Record(
+        Record simCardRecord = new Record(
                 request.getIccid(),
                 request.getCustomerEmail(),
                 isSuccess);
-        Record savedRecord = recordService.save(record);
+        Record savedRecord = recordService.save(simCardRecord);
 
         if (isSuccess) {
             String successMessage = "SIM card activated successfully, ID: " + savedRecord.getId();
